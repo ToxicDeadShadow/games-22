@@ -1,0 +1,43 @@
+{
+    "items": [
+        {
+            "label": "Upgrades",
+            "action": "showUpgrades"
+        },
+        {
+            "label": "Save Game",
+            "action": "save"
+        },
+        {
+            "label": "Load Game",
+            "action": "load"
+        },
+        {
+            "label": "Reset Game",
+            "action": "reset"
+        }
+    ],
+    "upgrades": [
+        {
+            "id": "cursor",
+            "name": "Cursor",
+            "description": "Automatically clicks once per second",
+            "baseCost": 15,
+            "cpsIncrease": 0.1
+        },
+        {
+            "id": "grandma",
+            "name": "Grandma",
+            "description": "Bakes cookies for you",
+            "baseCost": 100,
+            "cpsIncrease": 1
+        },
+        {
+            "id": "farm",
+            "name": "Cookie Farm",
+            "description": "Grows cookie plants",
+            "baseCost": 500,
+            "cpsIncrease": 5
+        }
+    ]
+}
