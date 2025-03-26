@@ -87,6 +87,7 @@ let upgrades = {
     }
 };
 
+// Move handleLogin and related functions to the top level
 async function handleLogin() {
     const username = document.getElementById('username-input').value.trim();
     if (username.length < 3) {
@@ -94,23 +95,28 @@ async function handleLogin() {
         return;
     }
     
-    const banStatus = await checkBanStatus(username);
-    if (banStatus.banned) {
-        alert(`You are banned! Reason: ${banStatus.reason}\nExpires: ${banStatus.expires || 'Never'}`);
-        return;
+    try {
+        // Save username immediately
+        localStorage.setItem('cookieClickerUsername', username);
+        currentUser = username;
+        
+        hideLoginModal();
+        loadGame();
+        
+        if (isMobile) {
+            optimizeForMobile();
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        alert('Error logging in. Please try again.');
     }
-    
-    // Save username persistently
-    localStorage.setItem('cookieClickerUsername', username);
-    currentUser = username;
-    
-    hideLoginModal();
-    loadGame();
 }
 
 function hideLoginModal() {
-    document.getElementById('login-modal').style.display = 'none';
-    document.getElementById('login-overlay').style.display = 'none';
+    const modal = document.getElementById('login-modal');
+    const overlay = document.getElementById('login-overlay');
+    if (modal) modal.style.display = 'none';
+    if (overlay) overlay.style.display = 'none';
 }
 
 function checkExistingLogin() {
@@ -280,10 +286,24 @@ function closeWindow() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Setup login button handler
+    document.getElementById('login-button').addEventListener('click', handleLogin);
+    
+    // Handle enter key in username input
+    document.getElementById('username-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleLogin();
+        }
+    });
+
     initGame();
     
-    // Only show login if no existing user found
-    if (!checkExistingLogin()) {
+    // Check for existing login
+    if (localStorage.getItem('cookieClickerUsername')) {
+        currentUser = localStorage.getItem('cookieClickerUsername');
+        hideLoginModal();
+        loadGame();
+    } else {
         document.getElementById('login-modal').style.display = 'block';
         document.getElementById('login-overlay').style.display = 'block';
     }
