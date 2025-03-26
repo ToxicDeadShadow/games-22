@@ -1,0 +1,20 @@
+{
+    "categories": [
+        {
+            "name": "Buildings",
+            "icon": "🏢",
+            "upgrades": ["cursor", "grandma", "farm", "factory", "mine", "lab", "temple", "wizard", "shipment", "alchemy", "portal", "timeMachine"]
+        },
+        {
+            "name": "Research",
+            "icon": "🔬",
+            "upgrades": []
+        }
+    ],
+    "window": {
+        "title": "Upgrades",
+        "width": "400px",
+        "height": "600px",
+        "position": "right"
+    }
+}

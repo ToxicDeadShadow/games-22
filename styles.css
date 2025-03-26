@@ -1,0 +1,309 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.stats {
+    text-align: center;
+}
+
+.cookie-count {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin: 1rem 0;
+    background: linear-gradient(135deg, #fff, #ccc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.cookie-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cookie {
+    font-size: 10rem;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+}
+
+.cookie:hover {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.2));
+}
+
+.cookie:active {
+    transform: scale(0.95);
+}
+
+.shop {
+    background: #333;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.upgrade {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    margin: 0.5rem 0;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.upgrade:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+button {
+    background: linear-gradient(135deg, #666 0%, #444 100%);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #777 0%, #555 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+button:disabled {
+    background: #555;
+    cursor: not-allowed;
+}
+
+@keyframes cookieClick {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+}
+
+.cookie-click {
+    animation: cookieClick 0.1s ease-out;
+}
+
+.window {
+    background: rgba(30, 30, 30, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.window-bar {
+    background: #252525;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #333;
+    -webkit-app-region: drag;
+    user-select: none;
+}
+
+.window-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.window-buttons {
+    display: flex;
+    gap: 0.5rem;
+    -webkit-app-region: no-drag;
+}
+
+.control-button {
+    background: none;
+    border: none;
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.control-button:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.control-button.close:hover {
+    background: #ff4444;
+}
+
+.control-button.minimize:hover {
+    background: #ffb74d;
+}
+
+.control-button.maximize:hover {
+    background: #4caf50;
+}
+
+.window-controls {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.window-title {
+    font-weight: bold;
+}
+
+.upgrades-window {
+    position: fixed;
+    top: 50%;
+    right: -400px;
+    transform: translateY(-50%);
+    width: 400px;
+    height: 80vh;
+    background: rgba(30, 30, 30, 0.9);
+    backdrop-filter: blur(10px);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: -8px 0 32px rgba(0,0,0,0.3);
+    transition: right 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.upgrades-window.show {
+    right: 0;
+}
+
+.upgrades-window .window-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #252525;
+    border-radius: 10px 0 0 0;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0 0.5rem;
+}
+
+close-button:hover {
+    color: #ff4444;
+}
+
+.upgrades-content {
+    padding: 1rem;
+    flex-grow: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #666 #333;
+}
+
+.upgrades-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.upgrades-content::-webkit-scrollbar-track {
+    background: #333;
+}
+
+.upgrades-content::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 4px;
+}
+
+#upgrades-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.5rem;
+}
+
+#upgrades-list .upgrade {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    background: rgba(255,255,255,0.05);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+#upgrades-list .upgrade:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+.upgrade-icon {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.upgrade-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.upgrade-name {
+    font-weight: bold;
+}
+
+.upgrade-description {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.upgrade-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.9rem;
+    color: #aaa;
+}

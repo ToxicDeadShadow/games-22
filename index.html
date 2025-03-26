@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Cookie Clicker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="window">
+        <div class="window-bar">
+            <div class="window-controls">
+                <div class="window-title">Cookie Clicker</div>
+                <div class="window-buttons">
+                    <button class="control-button" onclick="toggleUpgradesWindow()">📊</button>
+                    <button class="control-button minimize">─</button>
+                    <button class="control-button maximize">□</button>
+                    <button class="control-button close">×</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-container">
+            <div class="stats">
+                <h1>Cookie Clicker</h1>
+                <div class="cookie-count">
+                    <span id="cookie-count">0</span> cookies
+                </div>
+                <div class="cps">
+                    <span id="cps">0</span> cookies per second
+                </div>
+            </div>
+            
+            <div class="cookie-container">
+                <div id="cookie" class="cookie">🍪</div>
+            </div>
+            <!-- Remove the shop div and let upgrades window handle everything -->
+        </div>
+
+        <div class="upgrades-window" id="upgrades-window">
+            <div class="window-bar">
+                <div class="window-title">Upgrades</div>
+                <button class="close-button" onclick="toggleUpgradesWindow()">×</button>
+            </div>
+            <div class="upgrades-content">
+                <div id="upgrades-list"></div>
+            </div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
