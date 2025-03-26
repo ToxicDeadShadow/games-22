@@ -116,9 +116,15 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('cookieClickerUsername', currentUser);
     }
 
-    // Prevent default touch behaviors
-    document.body.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
-    document.documentElement.style.touchAction = 'manipulation';
+    // Basic touch optimizations
+    document.body.style.overscrollBehavior = 'none';
+    document.documentElement.style.touchAction = 'none';
+    
+    // Prevent double-tap zoom
+    document.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        e.target.click();
+    }, { passive: false });
     
     initGame();
     loadGame();
