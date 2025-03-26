@@ -15,20 +15,13 @@
     </style>
 </head>
 <body>
-    <div id="login-overlay" class="overlay"></div>
-    <div id="login-modal" class="login-modal">
-        <h2>Welcome to Cookie Clicker</h2>
-        <p>Please enter a username to start playing</p>
-        <input type="text" id="username-input" placeholder="Enter username">
-        <button id="login-button">Start Game</button>
-    </div>
-
     <div class="window">
         <div class="window-bar">
             <div class="window-controls">
                 <div class="window-title">Cookie Clicker</div>
                 <div class="window-buttons">
                     <button class="control-button" onclick="toggleUpgradesWindow()">📊</button>
+                    <button class="control-button" onclick="showDevLogin()">👤</button>
                     <button class="control-button minimize">─</button>
                     <button class="control-button maximize">□</button>
                     <button class="control-button close">×</button>
@@ -63,6 +56,13 @@
             </div>
         </div>
     </div>
+
+    <!-- Add dev login dialog -->
+    <div id="dev-login" class="dev-login">
+        <input type="password" id="dev-password" placeholder="Dev Password">
+        <button onclick="handleDevLogin()">Login</button>
+    </div>
+
     <script src="banned_players.js"></script>
     <script src="game.js"></script>
 </body>

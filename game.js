@@ -87,35 +87,70 @@ let upgrades = {
     }
 };
 
-// Move handleLogin and related functions to the top level
-async function handleLogin() {
-    const username = document.getElementById('username-input').value.trim();
-    if (!username || username.length < 3) {
-        alert('Username must be at least 3 characters long');
-        return;
+// Remove login related functions
+// Add dev login functions
+function showDevLogin() {
+    const dialog = document.getElementById('dev-login');
+    dialog.style.display = dialog.style.display === 'none' ? 'block' : 'none';
+}
+
+function handleDevLogin() {
+    const password = document.getElementById('dev-password').value;
+    if (password === '1797') {
+        localStorage.setItem('cookieClickerUsername', 'game-admin-dev');
+        currentUser = 'game-admin-dev';
+        document.getElementById('dev-login').style.display = 'none';
+        alert('Logged in as developer');
+        initGame();
+        loadGame();
+    } else {
+        alert('Invalid developer password');
     }
+}
+
+// Initialize game with default username
+document.addEventListener('DOMContentLoaded', () => {
+    currentUser = localStorage.getItem('cookieClickerUsername') || 'player-1';
     
-    currentUser = username;
-    localStorage.setItem('cookieClickerUsername', username);
-    hideLoginModal();
+    if (currentUser === 'player-1') {
+        localStorage.setItem('cookieClickerUsername', currentUser);
+    }
+
     initGame();
     loadGame();
-}
-
-function hideLoginModal() {
-    document.getElementById('login-modal').style.display = 'none';
-    document.getElementById('login-overlay').style.display = 'none';
-}
-
-function checkExistingLogin() {
-    const savedUsername = localStorage.getItem('cookieClickerUsername');
-    if (savedUsername) {
-        currentUser = savedUsername;
-        hideLoginModal();
-        loadGame();
-        return true;
+    
+    // Basic mobile optimization
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        document.body.style.touchAction = 'manipulation';
+        document.documentElement.style.touchAction = 'manipulation';
     }
-    return false;
+    
+    // Basic mobile optimization
+    if (isMobile) {
+        optimizeForMobile();
+    }
+    
+    document.querySelector('.minimize').addEventListener('click', minimizeWindow);
+    document.querySelector('.maximize').addEventListener('click', maximizeWindow);
+    document.querySelector('.close').addEventListener('click', closeWindow);
+});
+
+// Admin functions
+function isAdmin(username) {
+    return username === 'game-admin-dev';
+}
+
+function banPlayer(username, reason, duration = null) {
+    if (isAdmin(currentUser)) {
+        const bannedPlayers = JSON.parse(localStorage.getItem('bannedPlayers') || '[]');
+        bannedPlayers.push({
+            username,
+            reason,
+            timestamp: Date.now(),
+            expires: duration ? Date.now() + duration : null
+        });
+        localStorage.setItem('bannedPlayers', JSON.stringify(bannedPlayers));
+    }
 }
 
 function optimizeForMobile() {
@@ -273,32 +308,6 @@ function closeWindow() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const savedUsername = localStorage.getItem('cookieClickerUsername');
-    if (savedUsername) {
-        currentUser = savedUsername;
-        hideLoginModal();
-    }
-
-    document.getElementById('login-button').addEventListener('click', handleLogin);
-    document.getElementById('username-input').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleLogin();
-    });
-
-    initGame();
-    if (currentUser) {
-        loadGame();
-    }
-    
-    if (isMobile) {
-        optimizeForMobile();
-    }
-    
-    document.querySelector('.minimize').addEventListener('click', minimizeWindow);
-    document.querySelector('.maximize').addEventListener('click', maximizeWindow);
-    document.querySelector('.close').addEventListener('click', closeWindow);
-});
-
 function initGame() {
     upgrades = {
         cursor: {
@@ -402,23 +411,6 @@ document.getElementById('cookie').addEventListener('touchstart', (e) => {
 });
 
 // Add admin functions
-function banPlayer(username, reason, duration = null) {
-    if (currentUser && isAdmin(currentUser)) {
-        const banData = {
-            username,
-            reason,
-            timestamp: Date.now(),
-            expires: duration ? Date.now() + duration : null
-        };
-        addBan(banData);
-    }
-}
-
-function isAdmin(username) {
-    const admins = ['admin', 'moderator']; // Add your admin usernames here
-    return admins.includes(username);
-}
-
 async function checkBanStatus(username) {
     const response = await fetch('banned_players.js');
     const bans = await response.json();
