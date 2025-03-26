@@ -1,5 +1,3 @@
-const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
 let cookies = 0;
 let cps = 0;
 let currentUser = null;
@@ -116,18 +114,20 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('cookieClickerUsername', currentUser);
     }
 
-    // Basic touch optimizations
-    document.body.style.overscrollBehavior = 'none';
-    document.documentElement.style.touchAction = 'none';
-    
-    // Prevent double-tap zoom
-    document.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        e.target.click();
-    }, { passive: false });
-    
     initGame();
     loadGame();
+    
+    // Handle both click and touch
+    const cookie = document.getElementById('cookie');
+    ['click', 'touchend'].forEach(evt => 
+        cookie.addEventListener(evt, (e) => {
+            e.preventDefault();
+            cookies++;
+            cookie.classList.add('cookie-click');
+            setTimeout(() => cookie.classList.remove('cookie-click'), 100);
+            updateDisplay();
+        })
+    );
     
     // Add event listeners
     document.querySelector('.minimize').addEventListener('click', minimizeWindow);
@@ -254,15 +254,6 @@ function calculateCPS() {
     }
 }
 
-document.getElementById('cookie').addEventListener('click', () => {
-    cookies++;
-    document.getElementById('cookie').classList.add('cookie-click');
-    setTimeout(() => {
-        document.getElementById('cookie').classList.remove('cookie-click');
-    }, 100);
-    updateDisplay();
-});
-
 setInterval(() => {
     cookies += cps / 10;
     updateDisplay();
@@ -375,17 +366,6 @@ function initGame() {
 
 // Auto-save every 30 seconds
 setInterval(saveGame, 30000);
-
-// Add touch event support
-document.getElementById('cookie').addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    cookies++;
-    document.getElementById('cookie').classList.add('cookie-click');
-    setTimeout(() => {
-        document.getElementById('cookie').classList.remove('cookie-click');
-    }, 100);
-    updateDisplay();
-});
 
 // Add admin functions
 async function checkBanStatus(username) {
