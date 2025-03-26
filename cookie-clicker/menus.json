@@ -1,0 +1,19 @@
+{
+    "mainMenu": [
+        {
+            "label": "Game",
+            "items": [
+                {"id": "save", "label": "Save Game"},
+                {"id": "load", "label": "Load Game"},
+                {"id": "reset", "label": "Reset Game"}
+            ]
+        },
+        {
+            "label": "View",
+            "items": [
+                {"id": "toggleUpgrades", "label": "Toggle Upgrades Panel"},
+                {"id": "toggleStats", "label": "Toggle Stats"}
+            ]
+        }
+    ]
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Cookie Clicker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="window-bar">
+        <div class="menu-bar">
+            <div class="menu-item" id="game-menu">Game</div>
+            <div class="menu-item" id="view-menu">View</div>
+        </div>
+    </div>
+
+    <div class="game-container">
+        <div class="container">
+            <div class="stats">
+                <h2>Cookies: <span id="cookie-count">0</span></h2>
+                <h3>Per Click: <span id="per-click">1</span></h3>
+                <h3>Per Second: <span id="per-second">0</span></h3>
+            </div>
+            
+            <div class="cookie-container">
+                <div id="cookie" class="cookie">
+                    <div class="cookie-inner">
+                        <div class="chocolate-chip"></div>
+                        <div class="chocolate-chip"></div>
+                        <div class="chocolate-chip"></div>
+                        <div class="chocolate-chip"></div>
+                        <div class="chocolate-chip"></div>
+                        <div class="chocolate-chip"></div>
+                        <div class="chocolate-chip"></div>
+                        <div class="chocolate-chip"></div>
+                        <div class="chocolate-chip"></div>
+                        <div class="chocolate-chip"></div>
+                    </div>
+                </div>
+                <div class="cookie-particles" id="particles"></div>
+            </div>
+        </div>
+
+        <div class="side-panel" id="upgrades-panel">
+            <div class="panel-header">
+                <h2>Upgrades</h2>
+                <button class="close-btn">×</button>
+            </div>
+            <div class="upgrades">
+                <div class="upgrade-categories">
+                    <button class="category-btn active" data-category="click">Click</button>
+                    <button class="category-btn" data-category="auto">Auto</button>
+                    <button class="category-btn" data-category="special">Special</button>
+                </div>
+                <div class="upgrade-list" id="upgrade-list">
+                    <!-- Upgrades will be added dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
