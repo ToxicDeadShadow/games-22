@@ -90,33 +90,21 @@ let upgrades = {
 // Move handleLogin and related functions to the top level
 async function handleLogin() {
     const username = document.getElementById('username-input').value.trim();
-    if (username.length < 3) {
+    if (!username || username.length < 3) {
         alert('Username must be at least 3 characters long');
         return;
     }
     
-    try {
-        // Save username immediately
-        localStorage.setItem('cookieClickerUsername', username);
-        currentUser = username;
-        
-        hideLoginModal();
-        loadGame();
-        
-        if (isMobile) {
-            optimizeForMobile();
-        }
-    } catch (error) {
-        console.error('Login error:', error);
-        alert('Error logging in. Please try again.');
-    }
+    currentUser = username;
+    localStorage.setItem('cookieClickerUsername', username);
+    hideLoginModal();
+    initGame();
+    loadGame();
 }
 
 function hideLoginModal() {
-    const modal = document.getElementById('login-modal');
-    const overlay = document.getElementById('login-overlay');
-    if (modal) modal.style.display = 'none';
-    if (overlay) overlay.style.display = 'none';
+    document.getElementById('login-modal').style.display = 'none';
+    document.getElementById('login-overlay').style.display = 'none';
 }
 
 function checkExistingLogin() {
@@ -286,26 +274,20 @@ function closeWindow() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Setup login button handler
+    const savedUsername = localStorage.getItem('cookieClickerUsername');
+    if (savedUsername) {
+        currentUser = savedUsername;
+        hideLoginModal();
+    }
+
     document.getElementById('login-button').addEventListener('click', handleLogin);
-    
-    // Handle enter key in username input
     document.getElementById('username-input').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            handleLogin();
-        }
+        if (e.key === 'Enter') handleLogin();
     });
 
     initGame();
-    
-    // Check for existing login
-    if (localStorage.getItem('cookieClickerUsername')) {
-        currentUser = localStorage.getItem('cookieClickerUsername');
-        hideLoginModal();
+    if (currentUser) {
         loadGame();
-    } else {
-        document.getElementById('login-modal').style.display = 'block';
-        document.getElementById('login-overlay').style.display = 'block';
     }
     
     if (isMobile) {
