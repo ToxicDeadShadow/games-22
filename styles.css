@@ -232,7 +232,7 @@ button:disabled {
     padding: 0 0.5rem;
 }
 
-close-button:hover {
+.close-button:hover {
     color: #ff4444;
 }
 

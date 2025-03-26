@@ -60,6 +60,26 @@ let upgrades = {
         icon: "🧪",
         owned: 0,
         cost: 1400000
+    },
+    portal: {
+        name: "Cookie Portal",
+        baseCost: 20000000,
+        cps: 7800,
+        multiplier: 1.15,
+        description: "Opens portals to the cookie dimension.",
+        icon: "🌀",
+        owned: 0,
+        cost: 20000000
+    },
+    timeMachine: {
+        name: "Time Machine",
+        baseCost: 123456789,
+        cps: 45000,
+        multiplier: 1.15,
+        description: "Collects cookies from the past and future.",
+        icon: "⏰",
+        owned: 0,
+        cost: 123456789
     }
 };
 
@@ -261,6 +281,26 @@ function initGame() {
             icon: "🧪",
             owned: 0,
             cost: 1400000
+        },
+        portal: {
+            name: "Cookie Portal",
+            baseCost: 20000000,
+            cps: 7800,
+            multiplier: 1.15,
+            description: "Opens portals to the cookie dimension.",
+            icon: "🌀",
+            owned: 0,
+            cost: 20000000
+        },
+        timeMachine: {
+            name: "Time Machine",
+            baseCost: 123456789,
+            cps: 45000,
+            multiplier: 1.15,
+            description: "Collects cookies from the past and future.",
+            icon: "⏰",
+            owned: 0,
+            cost: 123456789
         }
     };
     
