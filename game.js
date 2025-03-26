@@ -1,3 +1,5 @@
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
 let cookies = 0;
 let cps = 0;
 let currentUser = null;
@@ -85,10 +87,17 @@ let upgrades = {
     }
 };
 
-function handleLogin() {
+async function handleLogin() {
     const username = document.getElementById('username-input').value.trim();
     if (username.length < 3) {
         alert('Username must be at least 3 characters long');
+        return;
+    }
+    
+    // Check if user is banned
+    const banStatus = await checkBanStatus(username);
+    if (banStatus.banned) {
+        alert(`You are banned! Reason: ${banStatus.reason}\nExpires: ${banStatus.expires || 'Never'}`);
         return;
     }
     
@@ -96,7 +105,24 @@ function handleLogin() {
     document.getElementById('login-modal').style.display = 'none';
     document.getElementById('login-overlay').style.display = 'none';
     
+    // Apply mobile optimizations
+    if (isMobile) {
+        optimizeForMobile();
+    }
+    
     loadGame();
+}
+
+function optimizeForMobile() {
+    document.body.classList.add('mobile');
+    // Adjust cookie size for better mobile tapping
+    const cookie = document.getElementById('cookie');
+    cookie.style.fontSize = '6rem';
+    
+    // Optimize touch response
+    document.body.style.touchAction = 'none';
+    document.body.style.userSelect = 'none';
+    document.body.style.webkitUserSelect = 'none';
 }
 
 function saveGame() {
@@ -345,3 +371,39 @@ document.getElementById('cookie').addEventListener('touchstart', (e) => {
     }, 100);
     updateDisplay();
 });
+
+// Add admin functions
+function banPlayer(username, reason, duration = null) {
+    if (currentUser && isAdmin(currentUser)) {
+        const banData = {
+            username,
+            reason,
+            timestamp: Date.now(),
+            expires: duration ? Date.now() + duration : null
+        };
+        addBan(banData);
+    }
+}
+
+function isAdmin(username) {
+    const admins = ['admin', 'moderator']; // Add your admin usernames here
+    return admins.includes(username);
+}
+
+async function checkBanStatus(username) {
+    const response = await fetch('banned_players.js');
+    const bans = await response.json();
+    
+    const ban = bans.find(b => b.username === username);
+    if (!ban) return { banned: false };
+    
+    if (ban.expires && Date.now() > ban.expires) {
+        return { banned: false };
+    }
+    
+    return {
+        banned: true,
+        reason: ban.reason,
+        expires: ban.expires ? new Date(ban.expires).toLocaleString() : 'Never'
+    };
+}
