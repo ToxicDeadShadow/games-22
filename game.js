@@ -116,20 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('cookieClickerUsername', currentUser);
     }
 
+    // Prevent default touch behaviors
+    document.body.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+    document.documentElement.style.touchAction = 'manipulation';
+    
     initGame();
     loadGame();
     
-    // Basic mobile optimization
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        document.body.style.touchAction = 'manipulation';
-        document.documentElement.style.touchAction = 'manipulation';
-    }
-    
-    // Basic mobile optimization
-    if (isMobile) {
-        optimizeForMobile();
-    }
-    
+    // Add event listeners
     document.querySelector('.minimize').addEventListener('click', minimizeWindow);
     document.querySelector('.maximize').addEventListener('click', maximizeWindow);
     document.querySelector('.close').addEventListener('click', closeWindow);
@@ -151,29 +145,6 @@ function banPlayer(username, reason, duration = null) {
         });
         localStorage.setItem('bannedPlayers', JSON.stringify(bannedPlayers));
     }
-}
-
-function optimizeForMobile() {
-    document.body.classList.add('mobile');
-    
-    // Adjust for mobile touch
-    const cookie = document.getElementById('cookie');
-    cookie.style.touchAction = 'manipulation';
-    
-    // Prevent zoom on double tap
-    document.documentElement.style.touchAction = 'manipulation';
-    
-    // Prevent pull to refresh
-    document.body.style.overscrollBehavior = 'none';
-    
-    // Ensure proper viewport height on mobile
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-    
-    window.addEventListener('resize', () => {
-        const vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-    });
 }
 
 function saveGame() {
