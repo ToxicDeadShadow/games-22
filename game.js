@@ -1,5 +1,7 @@
 let cookies = 0;
 let cps = 0;
+let currentUser = null;
+
 let upgrades = {
     cursor: {
         name: "Cursor",
@@ -83,15 +85,32 @@ let upgrades = {
     }
 };
 
+function handleLogin() {
+    const username = document.getElementById('username-input').value.trim();
+    if (username.length < 3) {
+        alert('Username must be at least 3 characters long');
+        return;
+    }
+    
+    currentUser = username;
+    document.getElementById('login-modal').style.display = 'none';
+    document.getElementById('login-overlay').style.display = 'none';
+    
+    loadGame();
+}
+
 function saveGame() {
-    localStorage.setItem('cookieGame', JSON.stringify({
+    if (!currentUser) return;
+    localStorage.setItem(`cookieGame_${currentUser}`, JSON.stringify({
         cookies,
-        upgrades
+        upgrades,
+        username: currentUser
     }));
 }
 
 function loadGame() {
-    const saved = JSON.parse(localStorage.getItem('cookieGame'));
+    if (!currentUser) return;
+    const saved = JSON.parse(localStorage.getItem(`cookieGame_${currentUser}`));
     if (saved) {
         cookies = saved.cookies;
         upgrades = saved.upgrades;
@@ -214,6 +233,11 @@ function closeWindow() {
 
 document.addEventListener('DOMContentLoaded', () => {
     initGame();
+    // Show login if no user is saved
+    if (!currentUser) {
+        document.getElementById('login-modal').style.display = 'block';
+        document.getElementById('login-overlay').style.display = 'block';
+    }
     
     document.querySelector('.minimize').addEventListener('click', minimizeWindow);
     document.querySelector('.maximize').addEventListener('click', maximizeWindow);
@@ -307,3 +331,17 @@ function initGame() {
     updateDisplay();
     document.getElementById('upgrades-window').classList.add('show');
 }
+
+// Auto-save every 30 seconds
+setInterval(saveGame, 30000);
+
+// Add touch event support
+document.getElementById('cookie').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    cookies++;
+    document.getElementById('cookie').classList.add('cookie-click');
+    setTimeout(() => {
+        document.getElementById('cookie').classList.remove('cookie-click');
+    }, 100);
+    updateDisplay();
+});
