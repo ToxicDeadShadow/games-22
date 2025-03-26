@@ -94,35 +94,57 @@ async function handleLogin() {
         return;
     }
     
-    // Check if user is banned
     const banStatus = await checkBanStatus(username);
     if (banStatus.banned) {
         alert(`You are banned! Reason: ${banStatus.reason}\nExpires: ${banStatus.expires || 'Never'}`);
         return;
     }
     
+    // Save username persistently
+    localStorage.setItem('cookieClickerUsername', username);
     currentUser = username;
+    
+    hideLoginModal();
+    loadGame();
+}
+
+function hideLoginModal() {
     document.getElementById('login-modal').style.display = 'none';
     document.getElementById('login-overlay').style.display = 'none';
-    
-    // Apply mobile optimizations
-    if (isMobile) {
-        optimizeForMobile();
+}
+
+function checkExistingLogin() {
+    const savedUsername = localStorage.getItem('cookieClickerUsername');
+    if (savedUsername) {
+        currentUser = savedUsername;
+        hideLoginModal();
+        loadGame();
+        return true;
     }
-    
-    loadGame();
+    return false;
 }
 
 function optimizeForMobile() {
     document.body.classList.add('mobile');
-    // Adjust cookie size for better mobile tapping
-    const cookie = document.getElementById('cookie');
-    cookie.style.fontSize = '6rem';
     
-    // Optimize touch response
-    document.body.style.touchAction = 'none';
-    document.body.style.userSelect = 'none';
-    document.body.style.webkitUserSelect = 'none';
+    // Adjust for mobile touch
+    const cookie = document.getElementById('cookie');
+    cookie.style.touchAction = 'manipulation';
+    
+    // Prevent zoom on double tap
+    document.documentElement.style.touchAction = 'manipulation';
+    
+    // Prevent pull to refresh
+    document.body.style.overscrollBehavior = 'none';
+    
+    // Ensure proper viewport height on mobile
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    
+    window.addEventListener('resize', () => {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    });
 }
 
 function saveGame() {
@@ -259,10 +281,15 @@ function closeWindow() {
 
 document.addEventListener('DOMContentLoaded', () => {
     initGame();
-    // Show login if no user is saved
-    if (!currentUser) {
+    
+    // Only show login if no existing user found
+    if (!checkExistingLogin()) {
         document.getElementById('login-modal').style.display = 'block';
         document.getElementById('login-overlay').style.display = 'block';
+    }
+    
+    if (isMobile) {
+        optimizeForMobile();
     }
     
     document.querySelector('.minimize').addEventListener('click', minimizeWindow);
